@@ -40,21 +40,20 @@ Things you may want to cover:
 
 ### itemsテーブル（商品出品）
 
-| Column                | Type     | Options                        |
-| --------------------- | -------- | ------------------------------ |
-| id                    | bigint   | primary_key, auto_increment    |
-| name                  | string   | null: false                    |
-| description           | text     | null: false                    |
-| price                 | integer  | null: false                    |
-| category_id           | integer  | null: false                    |
-| condition_id          | integer  | null: false                    |
-| shipping_fee_id       | integer  | null: false                    |
-| prefecture_id         | integer  | null: false                    |
-| scheduled_delivery_id | integer  | null: false                    |
-| user_id               | bigint   | null: false, foreign_key: true |
-| sold_out              | boolean  | null: false, default: false    |
-| created_at            | datetime | null: false                    |
-| updated_at            | datetime | null: false                    |
+| Column                | Type      | Options                        |
+| --------------------- | --------- | ------------------------------ |
+| id                    | bigint    | primary_key, auto_increment    |
+| name                  | string    | null: false                    |
+| description           | text      | null: false                    |
+| price                 | integer   | null: false                    |
+| category_id           | integer   | null: false                    |
+| condition_id          | integer   | null: false                    |
+| shipping_fee_id       | integer   | null: false                    |
+| prefecture_id         | integer   | null: false                    |
+| scheduled_delivery_id | integer   | null: false                    |
+| user                  | references| null: false, foreign_key: true |
+| created_at            | datetime  | null: false                    |
+| updated_at            | datetime  | null: false                    |
 
 #### Association
 
@@ -68,14 +67,13 @@ Things you may want to cover:
 
 ### ordersテーブル（商品購入）
 
-| Column     | Type     | Options                        |
-| ---------- | -------- | ------------------------------ |
-| id         | bigint   | primary_key, auto_increment    |
-| item_id    | bigint   | null: false, foreign_key: true |
-| user_id    | bigint   | null: false, foreign_key: true |
-| price      | integer  | null: false                    |
-| created_at | datetime | null: false                    |
-| updated_at | datetime | null: false                    |
+| Column     | Type      | Options                        |
+| ---------- | --------- | ------------------------------ |
+| id         | bigint    | primary_key, auto_increment    |
+| item       | references| null: false, foreign_key: true |
+| user       | references| null: false, foreign_key: true |
+| created_at | datetime  | null: false                    |
+| updated_at | datetime  | null: false                    |
 
 #### Association
 
@@ -85,18 +83,18 @@ Things you may want to cover:
 
 ### addressesテーブル（配送先住所）
 
-| Column        | Type     | Options                        |
-| ------------- | -------- | ------------------------------ |
-| id            | bigint   | primary_key, auto_increment    |
-| order_id      | bigint   | null: false, foreign_key: true |
-| postal_code   | string   | null: false                    |
-| prefecture_id | integer  | null: false                    |
-| city          | string   | null: false                    |
-| house_number  | string   | null: false                    |
-| building_name | string   |                                |
-| phone_number  | string   | null: false                    |
-| created_at    | datetime | null: false                    |
-| updated_at    | datetime | null: false                    |
+| Column        | Type      | Options                        |
+| ------------- | --------- | ------------------------------ |
+| id            | bigint    | primary_key, auto_increment    |
+| order         | references| null: false, foreign_key: true |
+| postal_code   | string    | null: false                    |
+| prefecture_id | integer   | null: false                    |
+| city          | string    | null: false                    |
+| house_number  | string    | null: false                    |
+| building_name | string    |                                |
+| phone_number  | string    | null: false                    |
+| created_at    | datetime  | null: false                    |
+| updated_at    | datetime  | null: false                    |
 
 #### Association
 
