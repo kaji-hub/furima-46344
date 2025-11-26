@@ -38,6 +38,9 @@ gem "jbuilder"
 # Use Devise for authentication
 gem "devise"
 
+# Use ActiveHash for static data
+gem "active_hash"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
