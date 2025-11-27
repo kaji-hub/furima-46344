@@ -85,7 +85,7 @@
     <%# /配送について %>
 
     <%# 販売価格 %>
-    <div class="sell-price">
+    <div class="sell-price" data-controller="price-calculator">
       <div class="weight-bold-text question-text">
         <span>販売価格<br>(¥300〜9,999,999)</span>
         <a class="question" href="#">?</a>
@@ -97,18 +97,18 @@
             <span class="indispensable">必須</span>
           </div>
           <span class="sell-yen">¥</span>
-          <%= f.text_field :price, class:"price-input", id:"item-price", placeholder:"例）300" %>
+          <%= f.text_field :price, class:"price-input", id:"item-price", placeholder:"例）300", data: { price_calculator_target: "priceInput", action: "input->price-calculator#calculate" } %>
         </div>
         <div class="price-content">
           <span>販売手数料 (10%)</span>
           <span>
-            <span id='add-tax-price'></span>円
+            <span data-price-calculator-target="addTaxPrice"></span>円
           </span>
         </div>
         <div class="price-content">
           <span>販売利益</span>
           <span>
-            <span id='profit'></span>円
+            <span data-price-calculator-target="profit"></span>円
           </span>
         </div>
       </div>
@@ -155,33 +155,3 @@
     </p>
   </footer>
 </div>
-
-<script>
-  // 価格入力フィールドと表示要素を取得
-  const priceInput = document.getElementById('item-price');
-  const addTaxPrice = document.getElementById('add-tax-price');
-  const profit = document.getElementById('profit');
-
-  // 価格入力フィールドが存在する場合のみ処理を実行
-  if (priceInput) {
-    // 価格入力時に手数料と利益を自動計算
-    priceInput.addEventListener('input', function() {
-      const inputValue = priceInput.value;
-      
-      // 価格が300円以上9999999円以下の場合のみ計算
-      if (inputValue >= 300 && inputValue <= 9999999) {
-        // 手数料を計算（価格の10%、小数点以下切り捨て）
-        const fee = Math.floor(inputValue * 0.1);
-        // 利益を計算（価格 - 手数料）
-        const gain = inputValue - fee;
-        // 手数料と利益を表示
-        addTaxPrice.textContent = fee;
-        profit.textContent = gain;
-      } else {
-        // 範囲外の場合は表示をクリア
-        addTaxPrice.textContent = '';
-        profit.textContent = '';
-      }
-    });
-  }
-</script>
