@@ -8,6 +8,7 @@ export default class extends Controller {
     if (this.priceInputTarget.value) {
       this.calculate()
     }
+      this.priceInputTarget.addEventListener('input', () => this.calculate())
   }
 
   calculate() {
