@@ -65,6 +65,18 @@ RSpec.describe Item, type: :model do
         expect(@item.errors[:price]).to include('must be an integer')
       end
 
+      it '価格が全角数字の場合は無効' do
+        @item.price = '１０００'
+        @item.valid?
+        expect(@item.errors[:price]).to include('is not a number')
+      end
+
+      it '価格が文字列の場合は無効' do
+        @item.price = 'abc'
+        @item.valid?
+        expect(@item.errors[:price]).to include('is not a number')
+      end
+
       it 'カテゴリーが---（id: 1）が選択されている場合は無効' do
         @item.category_id = 1
         @item.valid?
@@ -99,6 +111,12 @@ RSpec.describe Item, type: :model do
         @item.image.detach
         @item.valid?
         expect(@item.errors[:image]).to include("can't be blank")
+      end
+
+      it 'userが紐づいていない場合は無効' do
+        @item.user = nil
+        @item.valid?
+        expect(@item.errors[:user]).to include('must exist')
       end
     end
   end
