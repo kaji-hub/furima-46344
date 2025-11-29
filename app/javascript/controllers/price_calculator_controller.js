@@ -8,7 +8,16 @@ export default class extends Controller {
     if (this.priceInputTarget.value) {
       this.calculate()
     }
-      this.priceInputTarget.addEventListener('input', () => this.calculate())
+    this.priceInputTarget.addEventListener('input', () => this.calculate())
+    
+    // Turboのイベントに対応（render :new時にも動作するようにする）
+    const price = () => {
+      if (this.priceInputTarget && this.priceInputTarget.value) {
+        this.calculate()
+      }
+    }
+    window.addEventListener("turbo:load", price)
+    window.addEventListener("turbo:render", price)
   }
 
   calculate() {
