@@ -31,7 +31,6 @@ class ItemsController < ApplicationController
     if @item.update(item_params_without_user_id)
       redirect_to item_path(@item)
     else
-      @item.price = nil
       render :edit, status: :unprocessable_entity
     end
   end
