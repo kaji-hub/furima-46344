@@ -51,8 +51,8 @@ class ItemsController < ApplicationController
   end
 
   def item_params_without_user_id
-    permitted_params = params.require(:item).permit(:name, :description, :price, :category_id, :condition_id, :shipping_fee_id, :prefecture_id,
-                                                    :scheduled_delivery_id, :image)
+    permitted_params = params.require(:item).permit(:name, :description, :price, :category_id, :condition_id,
+                                                    :shipping_fee_id, :prefecture_id, :scheduled_delivery_id, :image)
     # 画像が送信されていない場合は画像パラメータを除外（既存の画像を保持）
     permitted_params.delete(:image) if params[:item][:image].blank?
     permitted_params
