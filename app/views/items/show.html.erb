@@ -31,10 +31,8 @@
       <%= link_to "商品の編集", "#", method: :get, class: "item-red-btn" %>
       <p class="or-text">or</p>
       <%= link_to "削除", "#", data: {turbo_method: :delete}, class:"item-destroy" %>
-    <% else %>
-      <% if user_signed_in? %>
-        <%= link_to "購入画面に進む", "#" ,class:"item-red-btn"%>
-      <% end %>
+    <% elsif user_signed_in? && current_user.id != @item.user_id %>
+      <%= link_to "購入画面に進む", "#" ,class:"item-red-btn"%>
     <% end %>
   
 
