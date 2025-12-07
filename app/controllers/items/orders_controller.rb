@@ -40,9 +40,10 @@ class Items::OrdersController < ApplicationController
   end
 
   def order_address_params
-    params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number, :token).merge(
-      item_id: params[:item_id], user_id: current_user.id
-    )
+    params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :house_number, :building_name,
+                                          :phone_number, :token).merge(
+                                            item_id: params[:item_id], user_id: current_user.id
+                                          )
   end
 
   def pay_item
@@ -54,4 +55,3 @@ class Items::OrdersController < ApplicationController
     )
   end
 end
-
