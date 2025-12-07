@@ -1,10 +1,7 @@
-<% content_for :head do %>
-  <meta name="turbo-cache-control" content="no-cache">
-<% end %>
 <%= render "shared/second-header"%>
 <%= render 'shared/error_messages', model: @order_address %>
 
-<div class='transaction-contents' data-turbo-cache="false">
+<div class='transaction-contents'>
   <div class='transaction-main'>
     <h1 class='transaction-title-text'>
       購入内容の確認

@@ -13,13 +13,9 @@ class Items::OrdersController < ApplicationController
     @order_address = OrderAddress.new(order_address_params)
     gon.public_key = ENV['PAYJP_PUBLIC_KEY']
 
-    if @order_address.valid?
+    if @order_address.save
       pay_item
-      if @order_address.save
-        redirect_to root_path
-      else
-        render :new, status: :unprocessable_entity
-      end
+      redirect_to root_path
     else
       render :new, status: :unprocessable_entity
     end
@@ -31,19 +27,16 @@ class Items::OrdersController < ApplicationController
     @item = Item.find(params[:item_id])
   end
 
-  def ensure_not_owner
-    redirect_to root_path if @item.user_id == current_user.id
-  end
+  def redirect_if_owner_or_sold
+    return unless @item.user_id == current_user.id || @item.order.present?
 
-  def ensure_not_sold
-    redirect_to root_path if @item.order.present?
+    redirect_to root_path
   end
 
   def order_address_params
-    params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :house_number, :building_name,
-                                          :phone_number, :token).merge(
-                                            item_id: params[:item_id], user_id: current_user.id
-                                          )
+    params.require(:order_address).permit(:postal_code, :prefecture_id, :city, :house_number, :building_name, :phone_number, :token).merge(
+      item_id: params[:item_id], user_id: current_user.id
+    )
   end
 
   def pay_item

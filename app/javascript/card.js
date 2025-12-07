@@ -85,10 +85,6 @@ function initializeCardForm() {
     return;
   }
 
-  if (typeof gon === 'undefined' || !gon.public_key) {
-    console.error('PAY.JP公開鍵が設定されていません');
-    return;
-  }
 
   const publicKey = gon.public_key;
 

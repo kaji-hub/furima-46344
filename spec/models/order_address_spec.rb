@@ -24,6 +24,14 @@ RSpec.describe OrderAddress, type: :model do
         expect(address.building_name).to eq('柳ビル103')
         expect(address.phone_number).to eq('09012345678')
       end
+      it '建物名が空でも保存できること' do
+        @order_address.building_name = ''
+        expect(@order_address).to be_valid
+        expect { @order_address.save }.to change { Order.count }.by(1).and change { Address.count }.by(1)
+
+        address = Address.last
+        expect(address.building_name).to eq('')
+      end
     end
 
     context '異常系' do
