@@ -48,6 +48,7 @@ class ItemsController < ApplicationController
 
   def ensure_owner
     redirect_to root_path unless @item.user_id == current_user.id
+    redirect_to root_path if @item.order.present?
   end
 
   def item_params

@@ -41,6 +41,12 @@ gem "devise"
 # Use ActiveHash for static data
 gem "active_hash"
 
+# PAY.JP決済処理用
+gem "payjp"
+
+# クライアントサイドに公開鍵を渡す用
+gem "gon"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

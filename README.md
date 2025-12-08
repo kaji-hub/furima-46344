@@ -108,3 +108,28 @@ Things you may want to cover:
 
 ER図ファイル: `furima-46344_er.dio`
 
+## 環境変数の設定
+
+PAY.JP決済機能を使用するため、以下の環境変数を設定してください。
+
+### 設定方法
+
+プロジェクトルートに`.env`ファイルを作成し、以下の環境変数を設定してください：
+
+```
+PAYJP_SECRET_KEY=sk_test_xxxxxxxxxxxxx
+PAYJP_PUBLIC_KEY=pk_test_xxxxxxxxxxxxx
+```
+
+### APIキーの取得方法
+
+1. PAY.JPのダッシュボード（https://pay.jp/dashboard）にログイン
+2. 「APIキー」ページからテスト環境用のAPIキーを取得
+3. `.env`ファイルに設定
+
+### 注意事項
+
+- `.env`ファイルは`.gitignore`に含まれているため、Gitにコミットされません
+- 環境変数は絶対にコードに直書きしないでください
+- 本番環境でも同様に環境変数を設定してください
+
