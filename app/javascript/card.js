@@ -45,30 +45,42 @@ function cleanupCardForm() {
   cardFormInitialized = false;
 }
 
+// Turboイベントの処理
 document.addEventListener('turbo:before-cache', function() {
   cleanupCardForm();
 });
 
 document.addEventListener('turbo:load', function() {
   cleanupCardForm();
-  setTimeout(initializeCardForm, 200);
+  setTimeout(initializeCardForm, 300);
 });
 
 document.addEventListener('turbo:render', function() {
   cleanupCardForm();
-  setTimeout(initializeCardForm, 200);
+  setTimeout(initializeCardForm, 300);
 });
 
+// 通常のページロード時の処理
 document.addEventListener('DOMContentLoaded', function() {
-  setTimeout(initializeCardForm, 200);
+  setTimeout(initializeCardForm, 300);
 });
 
+// ブラウザの戻る/進むボタン対応
 window.addEventListener('pageshow', function(event) {
   if (event.persisted) {
     cleanupCardForm();
-    setTimeout(initializeCardForm, 200);
+    setTimeout(initializeCardForm, 300);
   }
 });
+
+// ページが完全に読み込まれた後の処理（本番環境での保険）
+if (document.readyState === 'complete') {
+  setTimeout(initializeCardForm, 500);
+} else {
+  window.addEventListener('load', function() {
+    setTimeout(initializeCardForm, 500);
+  });
+}
 
 function initializeCardForm() {
   const form = document.getElementById('charge-form');
@@ -129,11 +141,37 @@ function initializeCardForm() {
   const cvcForm = document.getElementById('cvc-form');
 
   if (numberForm && expiryForm && cvcForm) {
-    numberElement.mount('#number-form');
-    expiryElement.mount('#expiry-form');
-    cvcElement.mount('#cvc-form');
+    try {
+      numberElement.mount('#number-form');
+      expiryElement.mount('#expiry-form');
+      cvcElement.mount('#cvc-form');
+      console.log('PAY.JP Elementsが正常にマウントされました');
+    } catch (error) {
+      console.error('PAY.JP Elementsのマウントに失敗しました:', error);
+      // リトライ処理
+      setTimeout(function() {
+        try {
+          if (numberForm && expiryForm && cvcForm) {
+            numberElement.mount('#number-form');
+            expiryElement.mount('#expiry-form');
+            cvcElement.mount('#cvc-form');
+            console.log('PAY.JP Elementsのリトライが成功しました');
+          }
+        } catch (retryError) {
+          console.error('PAY.JP Elementsのリトライも失敗しました:', retryError);
+          alert('クレジットカード入力フォームの初期化に失敗しました。ページを再読み込みしてください。');
+        }
+      }, 500);
+      return;
+    }
   } else {
-    console.error('PAY.JP Elementsのマウント先が見つかりません');
+    console.error('PAY.JP Elementsのマウント先が見つかりません', {
+      numberForm: !!numberForm,
+      expiryForm: !!expiryForm,
+      cvcForm: !!cvcForm
+    });
+    // DOM要素が見つからない場合もリトライ
+    setTimeout(initializeCardForm, 500);
     return;
   }
 
