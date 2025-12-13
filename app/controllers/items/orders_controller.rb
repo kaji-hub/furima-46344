@@ -6,12 +6,24 @@ class Items::OrdersController < ApplicationController
 
   def new
     @order_address = OrderAddress.new
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+    # 環境変数が設定されていない場合のエラーハンドリング
+    payjp_public_key = ENV['PAYJP_PUBLIC_KEY']
+    if payjp_public_key.blank?
+      Rails.logger.error "PAYJP_PUBLIC_KEY環境変数が設定されていません"
+      flash[:alert] = "決済機能の設定が正しくありません。管理者にお問い合わせください。"
+    end
+    gon.public_key = payjp_public_key
   end
 
   def create
     @order_address = OrderAddress.new(order_address_params)
-    gon.public_key = ENV['PAYJP_PUBLIC_KEY']
+    # 環境変数が設定されていない場合のエラーハンドリング
+    payjp_public_key = ENV['PAYJP_PUBLIC_KEY']
+    if payjp_public_key.blank?
+      Rails.logger.error "PAYJP_PUBLIC_KEY環境変数が設定されていません"
+      flash[:alert] = "決済機能の設定が正しくありません。管理者にお問い合わせください。"
+    end
+    gon.public_key = payjp_public_key
 
     if @order_address.save
       pay_item
@@ -42,11 +54,25 @@ class Items::OrdersController < ApplicationController
   end
 
   def pay_item
-    Payjp.api_key = ENV['PAYJP_SECRET_KEY']
+    payjp_secret_key = ENV['PAYJP_SECRET_KEY']
+    if payjp_secret_key.blank?
+      Rails.logger.error "PAYJP_SECRET_KEY環境変数が設定されていません"
+      raise "決済処理の設定が正しくありません"
+    end
+    
+    Payjp.api_key = payjp_secret_key
     Payjp::Charge.create(
       amount: @item.price,
       card: @order_address.token,
       currency: 'jpy'
     )
+  rescue Payjp::CardError => e
+    Rails.logger.error "PAY.JP決済エラー: #{e.message}"
+    @order_address.errors.add(:base, "決済処理に失敗しました: #{e.message}")
+    raise
+  rescue => e
+    Rails.logger.error "決済処理エラー: #{e.class}: #{e.message}"
+    @order_address.errors.add(:base, "決済処理に失敗しました")
+    raise
   end
 end

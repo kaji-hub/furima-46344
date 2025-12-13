@@ -81,16 +81,42 @@ function initializeCardForm() {
   }
 
   if (typeof Payjp === 'undefined') {
-    setTimeout(initializeCardForm, 100);
+    // PAY.JPスクリプトの読み込みを待つ（最大10秒）
+    let retryCount = 0;
+    const maxRetries = 100;
+    const checkPayjp = setInterval(function() {
+      retryCount++;
+      if (typeof Payjp !== 'undefined') {
+        clearInterval(checkPayjp);
+        initializeCardForm();
+      } else if (retryCount >= maxRetries) {
+        clearInterval(checkPayjp);
+        console.error('PAY.JPスクリプトの読み込みに失敗しました');
+        alert('クレジットカード入力フォームの読み込みに失敗しました。ページを再読み込みしてください。');
+        return;
+      }
+    }, 100);
     return;
   }
 
+  // gon.public_keyの確認
+  if (!gon || !gon.public_key) {
+    console.error('PAY.JP公開鍵が設定されていません。環境変数PAYJP_PUBLIC_KEYを確認してください。');
+    alert('クレジットカード機能の設定が正しくありません。管理者にお問い合わせください。');
+    return;
+  }
 
   const publicKey = gon.public_key;
 
   // Payjpインスタンスは一度だけ作成し再利用する
   if (!payjpInstance) {
-    payjpInstance = Payjp(publicKey);
+    try {
+      payjpInstance = Payjp(publicKey);
+    } catch (error) {
+      console.error('PAY.JPインスタンスの作成に失敗しました:', error);
+      alert('クレジットカード入力フォームの初期化に失敗しました。ページを再読み込みしてください。');
+      return;
+    }
   }
 
   payjpElements = payjpInstance.elements();
