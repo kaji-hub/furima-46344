@@ -8,8 +8,10 @@
     </h1>
   </div>
   <div class='login-flash-message'>
-    <%= flash[:notice] %>
-    <% if flash[:alert] %>
+    <% if flash[:notice].present? %>
+      <%= flash[:notice] %>
+    <% end %>
+    <% if flash[:alert].present? %>
       <div class="error-alert">
         <ul>
           <li class='error-message'><%= flash[:alert] %></li>
