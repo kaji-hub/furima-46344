@@ -82,6 +82,40 @@
 
 /* /支払額の表示 */
 
+/* エラーメッセージの表示 */
+.transaction-main .error-alert {
+  margin-bottom: 2vh;
+  padding: 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.transaction-main .error-alert ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.transaction-main .error-message {
+  font-size: 1.3vw;
+  list-style: none;
+  color: rgb(182, 48, 0);
+  text-align: center;
+  position: relative;
+  padding-left: 0;
+}
+
+.transaction-main .error-message::before {
+  content: "●";
+  color: rgb(182, 48, 0);
+  margin-right: 5px;
+}
+
+/* /エラーメッセージの表示 */
+
 /* カード情報の入力 */
 .credit-card-form {
   border-bottom: 2px solid #f5f5f5;
