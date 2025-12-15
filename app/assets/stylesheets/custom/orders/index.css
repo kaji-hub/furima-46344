@@ -95,26 +95,38 @@
 .transaction-main .error-alert ul {
   margin: 0;
   padding: 0;
+  padding-left: 120px;
   list-style: none;
   width: 100%;
-  text-align: center;
+  text-align: left;
   box-sizing: border-box;
 }
 
 .transaction-main .error-message {
-  font-size: 1.3vw;
+  font-family: "Source Sans Pro", Helvetica, Arial, "游ゴシック体", "YuGothic", "メイリオ", "Meiryo", sans-serif;
+  font-size: 14px;
+  font-weight: 530;
   list-style: none;
   color: rgb(182, 48, 0);
-  text-align: center;
+  text-align: left;
   position: relative;
-  padding-left: 0;
+  padding-left: 20px;
   margin-bottom: 5px;
 }
 
 .transaction-main .error-message::before {
-  content: "●";
-  color: rgb(182, 48, 0);
-  margin-right: 5px;
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgb(182, 48, 0);
+  background-color: #fff;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 8px;
 }
 
 /* /エラーメッセージの表示 */

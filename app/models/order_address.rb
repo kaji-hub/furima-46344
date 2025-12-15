@@ -14,8 +14,8 @@ class OrderAddress
 
   validates :phone_number, presence: true
   validates :phone_number,
-            length: { minimum: 10, maximum: 11, too_short: 'is too short', too_long: 'is invalid. Input only number' }, allow_blank: true
-  validates :phone_number, format: { with: /\A\d+\z/, message: 'is invalid. Input only number' }, allow_blank: true
+            length: { minimum: 10, maximum: 11, too_short: 'is too short', too_long: 'is invalid. Input only number' }
+  validates :phone_number, format: { with: /\A\d+\z/, message: 'is invalid. Input only number' }
 
   def save
     return false unless valid?
