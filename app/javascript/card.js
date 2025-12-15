@@ -178,9 +178,39 @@ function initializeCardForm() {
   submitHandler = function(event) {
     event.preventDefault();
 
+    // 既存のエラーメッセージをクリア
+    const existingErrorContainer = document.querySelector('.error-alert');
+    if (existingErrorContainer) {
+      existingErrorContainer.remove();
+    }
+
     payjpInstance.createToken(numberElement).then(function(response) {
       if (response.error) {
-        alert(response.error.message);
+        // エラーメッセージをフォーム上に表示（ダイアログは表示しない）
+        const errorMessage = response.error.message;
+        // エラーメッセージを表示する要素を作成（既存のエラー表示と同じ形式）
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'error-alert';
+        errorContainer.innerHTML = '<ul><li class="error-message">' + errorMessage + '</li></ul>';
+        
+        // フォームの最初に挿入（既存のエラーメッセージ表示と同じ位置）
+        const form = document.getElementById('charge-form');
+        if (form && form.parentElement) {
+          // フォームの前に挿入（既存のエラーメッセージ表示と同じ位置）
+          const transactionMain = form.closest('.transaction-main');
+          if (transactionMain) {
+            const existingErrors = transactionMain.querySelector('.error-alert');
+            if (existingErrors) {
+              existingErrors.replaceWith(errorContainer);
+            } else {
+              transactionMain.insertBefore(errorContainer, transactionMain.firstChild);
+            }
+          } else {
+            form.parentElement.insertBefore(errorContainer, form);
+          }
+        }
+        // エラーがある場合はフォーム送信を停止
+        return;
       } else {
         const token = response.id;
         const tokenInput = document.querySelector('input[name="order_address[token]"]');
@@ -194,6 +224,22 @@ function initializeCardForm() {
 
         cleanupCardForm();
         form.submit();
+      }
+    }).catch(function(error) {
+      // 予期しないエラーの場合もダイアログは表示しない
+      console.error('PAY.JP決済エラー:', error);
+      const errorContainer = document.createElement('div');
+      errorContainer.className = 'error-alert';
+      errorContainer.innerHTML = '<ul><li class="error-message">カード情報の処理中にエラーが発生しました。もう一度お試しください。</li></ul>';
+      
+      const form = document.getElementById('charge-form');
+      if (form && form.parentElement) {
+        const transactionMain = form.closest('.transaction-main');
+        if (transactionMain) {
+          transactionMain.insertBefore(errorContainer, transactionMain.firstChild);
+        } else {
+          form.parentElement.insertBefore(errorContainer, form);
+        }
       }
     });
   };
