@@ -95,7 +95,7 @@
   padding: 0;
   list-style: none;
   width: 100%;
-  text-align: center;
+  text-align: left;
   box-sizing: border-box;
 }
 
@@ -103,9 +103,10 @@
   font-size: 1.3vw;
   list-style: none;
   color: rgb(182, 48, 0);
-  text-align: center;
+  text-align: left;
   position: relative;
   padding-left: 0;
+  margin-bottom: 5px;
 }
 
 .transaction-main .error-message::before {
